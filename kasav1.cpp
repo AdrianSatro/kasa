@@ -8,21 +8,25 @@ float zaplata();
 void zerowanieIlosciNominalu(int DoZerowania[]);
 void wydawanieReszty(float SumaPieniedzyKlientaR, float  DoZaplaty);
 
-float Pieniadze[2][15] = { {500, 200, 100 , 50, 20, 10, 5, 2, 1, 0.50, 0.20, 0.10, 0.05, 0.02, 0.01}, // tabela do obliczania wartosci
+int Pieniadze[2][15] = { {50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100, 50, 20, 10, 5, 2, 1}, // tabela do obliczania wartosci
                         {3, 6, 6, 15, 21, 16, 7, 5, 16, 8, 10, 10, 8, 7, 15}}; //poczatkowa ilosc monet i banknotow w kasie
 
 string Templatka[15] = {"500zl","200zl","100zl","50zl","20zl","10zl","5zl","2zl","1zl","50gr","20gr","10gr","5gr","2gr","1gr"}; //tabela do pokazyweania wartosci
 int IloscNominalu[15];  //tabela z iloscia monet i banknotow jaka klient daje kasie ORAZ ilosc monet i banknotow jaka kasa daje klientowi (zaleznie od funkcji)
 
+
+
 int main() //main wywołujący funkcje
 { 
-    float KwotaDoZaplaty = 100; //wprowadzic ile pieniedzy ma zaplacic klient
+    int KwotaDoZaplaty = 100; //wprowadzic ile pieniedzy ma zaplacic klient
     stanKasy();
     //zaplata();
     float SumaPieniedzyKlienta = zaplata();
     wydawanieReszty(SumaPieniedzyKlienta, KwotaDoZaplaty);
 
 }
+
+
 
 void UI()  //
 {
@@ -36,16 +40,8 @@ void stanKasy()
 {
     UI();
 
-    for(int i=0; i<=14; i++)
-    {
-        if (i <= 8) 
-        {
-            //Templatka[i] = Pieniadze[0][i] + "zl";
-            cout << Pieniadze[0][i] << "zl: " << Pieniadze[1][i] << endl;
-        }
-        else
-        cout<<Pieniadze[0][i]*100<<"gr: "<<Pieniadze[1][i]<<endl;
-    }
+    for(int i=0; i<=14; i++) cout << Templatka[i]<<"  "<<Pieniadze[1][i] << endl;
+
 }
 
 float zaplata()
@@ -96,9 +92,18 @@ float zaplata()
 
 void wydawanieReszty(float SumaPieniedzyKlientaR, float KwotaDoZaplaty ) //algorytm zachłanny
 {   
-  //  float DoOddania = SumaPieniedzyKlientaR - KwotaDoZaplaty; 
-
-
+    float DoOddania = SumaPieniedzyKlientaR - KwotaDoZaplaty; 
+    for(int i=0; i<=14;)
+    {   
+        cout<<endl<<"do oddania zostalo: "<<DoOddania;
+        if(DoOddania-Pieniadze[0][i]>=0 && Pieniadze[1][i]>0)
+        {
+            DoOddania-=Pieniadze[0][i];
+            Pieniadze[1][i]--;
+        }
+        else i++;    
+    }
+    if(DoOddania>0) cout<<endl<<"Brak pieniedzy w kasie, do oddania zostalo: "<<DoOddania<<"zl";
 
 }
 
