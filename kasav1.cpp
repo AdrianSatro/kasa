@@ -5,28 +5,29 @@ using namespace std;
 void UI();
 void stanKasy();
 float zaplata();
-//void reszta(float x);
+void zerowanieIlosciNominalu(int DoZerowania[]);
+void wydawanieReszty(float SumaPieniedzyKlientaR, float  DoZaplaty);
 
-float Pieniadze[2][15] = { {500, 200, 100 , 50, 20, 10, 5, 2, 1, 0.50, 0.20, 0.10, 0.05, 0.02, 0.01},
-                        {1, 3, 6, 15, 21, 16, 7, 5, 16, 8, 10, 10, 8, 7, 15}};
+float Pieniadze[2][15] = { {500, 200, 100 , 50, 20, 10, 5, 2, 1, 0.50, 0.20, 0.10, 0.05, 0.02, 0.01}, // tabela do obliczania wartosci
+                        {3, 6, 6, 15, 21, 16, 7, 5, 16, 8, 10, 10, 8, 7, 15}}; //poczatkowa ilosc monet i banknotow w kasie
 
-string Templatka[15] = {"500zl","200zl","100zl","50zl","20zl","10zl","5zl","2zl","1zl","50gr","20gr","10gr","5gr","2gr","1gr"};
-int IloscNominalu[15]= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+string Templatka[15] = {"500zl","200zl","100zl","50zl","20zl","10zl","5zl","2zl","1zl","50gr","20gr","10gr","5gr","2gr","1gr"}; //tabela do pokazyweania wartosci
+int IloscNominalu[15];  //tabela z iloscia monet i banknotow jaka klient daje kasie ORAZ ilosc monet i banknotow jaka kasa daje klientowi (zaleznie od funkcji)
 
 int main() //main wywołujący funkcje
 { 
+    float KwotaDoZaplaty = 100; //wprowadzic ile pieniedzy ma zaplacic klient
     stanKasy();
-    zaplata();
-   // float SumaDoZaplaty = zaplata();
-    //reszta(SumaDoZaplaty);
-    stanKasy();
+    //zaplata();
+    float SumaPieniedzyKlienta = zaplata();
+    wydawanieReszty(SumaPieniedzyKlienta, KwotaDoZaplaty);
 
 }
 
 void UI()  //
 {
     cout<<"=========================================="<<endl;
-    cout<<"           Aplikacja kasa v1.0            "<<endl;
+    cout<<"               Aplikacja kasa             "<<endl;
     cout<<"=========================================="<<endl<<endl;
     cout<<"STAN KASY"<<endl;
 }
@@ -49,13 +50,14 @@ void stanKasy()
 
 float zaplata()
 {
-    float SumaDoZaplaty=0;
+    float SumaPieniedzyKlienta = 0;
     string OdKlienta;
-    int Flaga;
+    int Flaga;   //flaga zeby oznaczyc kiedy zakonczyc funkcje, dac blad wprowadzenia lub spytac ile pieniedzy o jakim nominale dal klient
     cout<<"Podaj osobno nominaly ktore wprowadzasz (np 50zl, 20gr)"<<endl;
 
     while(true)
     {       
+        zerowanieIlosciNominalu(IloscNominalu);
         int Ilosc = 0; //
         Flaga = 0;
         cout<<endl<<"Podaj nominal ktory dajesz (jezeli skonczyles wydawac pieniadze wpisz 'n': ";   
@@ -68,26 +70,42 @@ float zaplata()
 
                 cout<<endl<<"Ile nominalow?: ";
                 cin>>Ilosc;
-                IloscNominalu[i]+=Ilosc;
+                IloscNominalu[i]+=Ilosc;                      
                 //cout<<" "<<Templatka[i]<<" "<<OdKlienta;
-                SumaDoZaplaty+=Pieniadze[0][i]*IloscNominalu[i];
-                Pieniadze[1][i]+=IloscNominalu[i]; 
+                SumaPieniedzyKlienta+=Pieniadze[0][i]*IloscNominalu[i];     //sumuje ile klient dal nam pieniedzy
+                Pieniadze[1][i]+=IloscNominalu[i];               //"daje" pieniadze do kasy
                 Flaga = 0;
                 break;
             }
 
-            else if(OdKlienta == "n")
+            else if(OdKlienta == "n") //jezeli wpisze sie "n" to nastapi przerwanie petli 
             {
                 Flaga = 1; 
                 break;
             }
-            else Flaga = 2;
+            else Flaga = 2;  
         }
 
         if(Flaga == 1)  break;
         else if(Flaga == 2) cout<<endl<<"Bledne wprowadzenie";    
         else continue;
     }
-    return SumaDoZaplaty;
+    cout<<endl<<"Klient dal "<<SumaPieniedzyKlienta<<"zl";
+    return SumaPieniedzyKlienta;
 }
 
+void wydawanieReszty(float SumaPieniedzyKlientaR, float KwotaDoZaplaty ) //algorytm zachłanny
+{   
+  //  float DoOddania = SumaPieniedzyKlientaR - KwotaDoZaplaty; 
+
+
+
+}
+
+void zerowanieIlosciNominalu(int DoZerowania[])
+{
+    for(int i = 0; i<=14; i++)
+    {
+        DoZerowania[i]=0;
+    }
+}
