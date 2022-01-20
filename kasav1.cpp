@@ -4,7 +4,7 @@ using namespace std;
 
 void UI();
 void stanKasy();
-float zaplata();
+int zaplata();
 void zerowanieIlosciNominalu(int DoZerowania[]);
 void wydawanieReszty(float SumaPieniedzyKlientaR, float  DoZaplaty);
 
@@ -19,9 +19,10 @@ int IloscNominalu[15];  //tabela z iloscia monet i banknotow jaka klient daje ka
 int main() //main wywołujący funkcje
 { 
     int KwotaDoZaplaty = 100; //wprowadzic ile pieniedzy ma zaplacic klient
+    int KwotaDoZaplaty = 100*100;
     stanKasy();
     //zaplata();
-    float SumaPieniedzyKlienta = zaplata();
+    int SumaPieniedzyKlienta = zaplata();
     wydawanieReszty(SumaPieniedzyKlienta, KwotaDoZaplaty);
 
 }
@@ -44,9 +45,9 @@ void stanKasy()
 
 }
 
-float zaplata()
+int zaplata()
 {
-    float SumaPieniedzyKlienta = 0;
+    int SumaPieniedzyKlienta = 0;
     string OdKlienta;
     int Flaga;   //flaga zeby oznaczyc kiedy zakonczyc funkcje, dac blad wprowadzenia lub spytac ile pieniedzy o jakim nominale dal klient
     cout<<"Podaj osobno nominaly ktore wprowadzasz (np 50zl, 20gr)"<<endl;
@@ -69,7 +70,7 @@ float zaplata()
                 IloscNominalu[i]+=Ilosc;                      
                 //cout<<" "<<Templatka[i]<<" "<<OdKlienta;
                 SumaPieniedzyKlienta+=Pieniadze[0][i]*IloscNominalu[i];     //sumuje ile klient dal nam pieniedzy
-                Pieniadze[1][i]+=IloscNominalu[i];               //"daje" pieniadze do kasy
+                Pieniadze[1][i]+=IloscNominalu[i];           //"daje" pieniadze do kasy czyli zwiększa ilość banknotów/monet
                 Flaga = 0;
                 break;
             }
@@ -90,9 +91,10 @@ float zaplata()
     return SumaPieniedzyKlienta;
 }
 
-void wydawanieReszty(float SumaPieniedzyKlientaR, float KwotaDoZaplaty ) //algorytm zachłanny
+void wydawanieReszty(int SumaPieniedzyKlientaR, int KwotaDoZaplaty ) //algorytm zachłanny
 {   
-    float DoOddania = SumaPieniedzyKlientaR - KwotaDoZaplaty; 
+    int DoOddania = SumaPieniedzyKlientaR - KwotaDoZaplaty; 
+    
     for(int i=0; i<=14;)
     {   
         cout<<endl<<"do oddania zostalo: "<<DoOddania;
